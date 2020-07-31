@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 2 {
+	if len(os.Args) != 2 || os.Args[1] == "-h" || os.Args[1] == "--help" {
 		println("usage:", os.Args[0], "<filename>")
 		os.Exit(1)
 	}
