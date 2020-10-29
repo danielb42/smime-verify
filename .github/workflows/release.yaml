@@ -1,0 +1,66 @@
+on:
+  push:
+    tags:
+      - 'v*'
+
+name: Build
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+    
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "1.15"
+
+      - run: CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o smime-verify .
+      - run: tar czf smime-verify_linux_amd64.tar.gz smime-verify LICENSE README.md
+      - run: CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o smime-verify .
+      - run: tar czf smime-verify_darwin_amd64.tar.gz smime-verify LICENSE README.md
+      - run: CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o smime-verify.exe .
+      - run: zip smime-verify_windows_amd64.zip smime-verify.exe LICENSE README.md
+
+      - id: get_tag_name
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+      - uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_tag_name.outputs.VERSION }}
+          release_name: ${{ steps.get_tag_name.outputs.VERSION }}
+
+      - name: Upload linux asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: smime-verify_linux_amd64.tar.gz
+          asset_name: smime-verify_linux_amd64.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload darwin asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: smime-verify_darwin_amd64.tar.gz
+          asset_name: smime-verify_darwin_amd64.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload windows asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: smime-verify_windows_amd64.zip
+          asset_name: smime-verify_windows_amd64.zip
+          asset_content_type: application/zip
