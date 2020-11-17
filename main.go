@@ -7,7 +7,7 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/mastahyeti/cms"
+	cms "github.com/github/ietf-cms"
 )
 
 func main() {

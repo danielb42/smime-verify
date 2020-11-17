@@ -1,5 +1,5 @@
 module github.com/danielb42/smime-verify
 
-go 1.14
+go 1.15
 
-require github.com/mastahyeti/cms v0.0.6
+require github.com/github/ietf-cms v0.1.0
