@@ -45,12 +45,16 @@ func main() {
 func verifyOpts() x509.VerifyOptions {
 	roots := x509.NewCertPool()
 	roots.AppendCertsFromPEM([]byte(DTrust_Root))
-	roots.AppendCertsFromPEM([]byte(DTrust_Intermediate))
 	roots.AppendCertsFromPEM([]byte(Telesec_Root))
-	roots.AppendCertsFromPEM([]byte(Telesec_Intermediate))
+
+	intermediates := x509.NewCertPool()
+	intermediates.AppendCertsFromPEM([]byte(DTrust_Intermediate))
+	intermediates.AppendCertsFromPEM([]byte(Telesec_Intermediate))
 
 	return x509.VerifyOptions{
-		Roots: roots,
+		Roots:         roots,
+		Intermediates: intermediates,
+		KeyUsages:     []x509.ExtKeyUsage{x509.ExtKeyUsageAny},
 	}
 }
 
