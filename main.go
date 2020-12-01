@@ -24,6 +24,14 @@ func main() {
 
 	chains, err := sd.VerifyDetached(messageBytes(), verifyOpts())
 	if err != nil {
+		switch t := err.(type) {
+		case x509.CertificateInvalidError:
+			if t.Reason == x509.Expired {
+				println("signing certificate has expired")
+				os.Exit(2)
+			}
+		}
+
 		println("invalid signature")
 		os.Exit(2)
 	}
