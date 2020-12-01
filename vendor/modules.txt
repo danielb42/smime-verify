@@ -1,0 +1,6 @@
+# github.com/github/ietf-cms v0.1.0
+## explicit
+github.com/github/ietf-cms
+github.com/github/ietf-cms/oid
+github.com/github/ietf-cms/protocol
+github.com/github/ietf-cms/timestamp

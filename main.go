@@ -22,24 +22,28 @@ func main() {
 		os.Exit(1)
 	}
 
-	chains, err := sd.VerifyDetached(messageBytes(), verifyOpts())
-	if err != nil {
-		switch t := err.(type) {
-		case x509.CertificateInvalidError:
-			if t.Reason == x509.Expired {
-				println("signing certificate has expired")
-				os.Exit(2)
-			}
+	var expired bool
+	if _, err := sd.VerifyDetached(messageBytes(), verifyOpts()); err != nil {
+		if e, t := err.(x509.CertificateInvalidError); t && e.Reason == x509.Expired {
+			expired = true
+		} else {
+			println("Signature is INVALID")
+			os.Exit(2)
 		}
-
-		println("invalid signature")
-		os.Exit(2)
 	}
+
+	chains, _ := sd.VerifyDetachedIgnoreExpiry(messageBytes(), verifyOpts())
 
 	cert := chains[0][0][0]
 	subj := cert.Subject.String()
 
-	println("valid signature from", subj)
+	if expired {
+		println("Signature is VALID but EXPIRED")
+	} else {
+		println("Signature is VALID")
+	}
+
+	println("Signed by:", subj)
 }
 
 func verifyOpts() x509.VerifyOptions {
