@@ -1,6 +1,6 @@
 package main
 
-// D-TRUST Application Certificates CA 3-1 2013
+// D-TRUST Root CA 3 2013
 // https://www.d-trust.net/fileadmin/programme/Zertifikate/2013/d-trust_root_ca_3_2013.cer
 //
 const DTrust_Root = `-----BEGIN CERTIFICATE-----

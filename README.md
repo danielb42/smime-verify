@@ -7,7 +7,9 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/danielb42/smime-verify)](https://goreportcard.com/report/github.com/danielb42/smime-verify)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-Verification of S/MIME messages signed by `TeleSec Business CA 1` intermediate certification.
+Verification of S/MIME messages signed by D-Trust and Telesec intermediate certification.  
+
+Currently only `D-TRUST Application Certificates CA 3-1 2013` and `TeleSec Business CA 1` certificates are integrated. Please feel free to add others via Pull Request.
 
 ## Install
 
